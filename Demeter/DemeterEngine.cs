@@ -9,10 +9,15 @@ namespace Demeter
     public class DemeterEngine
     {
         private readonly IMoistureSensor _moistureSensor;
+        private readonly ILightSensor _lightSensor;
 
-        public DemeterEngine( IMoistureSensor moistureSensor)
+        bool LightsOn { get; set; }
+        
+        public DemeterEngine( IMoistureSensor moistureSensor, ILightSensor lightSensor)
         {
             _moistureSensor = moistureSensor;
+            _lightSensor = lightSensor;
+            LightsOn = false;
         }
         public MoistureLevel GetMoistureLevel()
         {

@@ -41,7 +41,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DemeterEngine.cs" />
+    <Compile Include="ILightSensor.cs" />
     <Compile Include="IMoistureSensor.cs" />
+    <Compile Include="LightSensor.cs" />
     <Compile Include="MoistureSensor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

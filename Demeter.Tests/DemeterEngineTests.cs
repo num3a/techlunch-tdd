@@ -10,6 +10,12 @@ namespace Demeter.Tests
 {
     public class DemeterEngineTests
     {
+        [SetUp]
+        public void Setup()
+        {
+            
+        }
+
         [TestCase(5, DemeterEngine.MoistureLevel.VeryLow)]
         [TestCase(10,DemeterEngine.MoistureLevel.VeryLow)]
         [TestCase(20, DemeterEngine.MoistureLevel.Low)]
@@ -19,15 +25,25 @@ namespace Demeter.Tests
         [TestCase(55, DemeterEngine.MoistureLevel.High)]
         [TestCase(80, DemeterEngine.MoistureLevel.VeryHigh)]
         [TestCase(100, DemeterEngine.MoistureLevel.VeryHigh)]
-        public void EngineShouldReturnMoistureLevel(int actualMoistureInPercentage, DemeterEngine.MoistureLevel level)
+        public void Engine_Should_ReturnMoistureLevel(int actualMoistureInPercentage, DemeterEngine.MoistureLevel level)
         {
             var moistureSensor = Substitute.For<IMoistureSensor>();
             moistureSensor.GetLevelInPourcentage().Returns(actualMoistureInPercentage);
-            var engine = new DemeterEngine(moistureSensor);
+            var engine = new DemeterEngine(moistureSensor, null);
 
             var moistureLevel = engine.GetMoistureLevel();
             moistureSensor.Received().GetLevelInPourcentage();
             Assert.AreEqual(moistureLevel, level);
+        }
+
+        [Test]
+        public void Engine_Should_TurnUpTheLight_When_TheNightCameOut()
+        {
+            var moistureSensor = Substitute.For<IMoistureSensor>();
+            var lightSensor = Substitute.For<ILightSensor>();
+
+            var engine = new DemeterEngine(moistureSensor, lightSensor);
+
         }
 
 
