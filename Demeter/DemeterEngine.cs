@@ -17,11 +17,24 @@ namespace Demeter
         public MoistureLevel GetMoistureLevel()
         {
             var level = _moistureSensor.GetLevelInPourcentage();
-            if (level < 50)
+            if (level <= 10)
+            {
+                return MoistureLevel.VeryLow;
+            }
+            if (level <= 30)
             {
                 return MoistureLevel.Low;
             }
-            return MoistureLevel.High;
+            if (level <= 40)
+            {
+                return MoistureLevel.Middle;
+            }
+            if (level <= 55)
+            {
+                return MoistureLevel.High;
+            }
+
+            return MoistureLevel.VeryHigh;
         }
 
         public enum MoistureLevel
@@ -29,8 +42,8 @@ namespace Demeter
             VeryLow,
             Low,
             High,
-            VeryHigh
-
+            VeryHigh,
+            Middle
         }
     }
 }
