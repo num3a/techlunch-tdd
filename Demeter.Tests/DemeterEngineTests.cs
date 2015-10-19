@@ -40,14 +40,24 @@ namespace Demeter.Tests
         }
         
         [Test]
-        public void Engine_Should_TurnUpTheLight_When_TheNightCameOut()
+        public void Engine_Should_TurnOnTheLight_When_TheNightCameOut()
         {
-            StubAmbiantLuminosity();
-            _engine.TurnOnTheLights();
+            StubAmbiantLuminosity(true);
+            _engine.ToogleTheLights();
 
             Assert.IsTrue(_engine.LightsOn);
         }
-        
+
+        [Test]
+        public void Engine_Should_TurnOffTheLight_When_TheSunRises()
+        {
+            StubAmbiantLuminosity(false);
+
+            _engine.ToogleTheLights();
+
+            Assert.IsFalse(_engine.LightsOn);
+        }
+
         private void InitializeEngine()
         {
             _moistureSensor = Substitute.For<IMoistureSensor>();
@@ -55,14 +65,15 @@ namespace Demeter.Tests
             _engine = new DemeterEngine(_moistureSensor, _lightSensor);
         }
 
-        private void StubAmbiantLuminosity()
+        private void StubAmbiantLuminosity(bool isDark)
         {
-            _lightSensor.AmbiantLuminosityIsDark().Returns(true);
+            _lightSensor.AmbiantLuminosityIsDark().Returns(isDark);
         }
 
         private void StubGetLevelInPourcentage(int actualMoistureInPercentage)
         {
             _moistureSensor.GetLevelInPourcentage().Returns(actualMoistureInPercentage);
         }
+
     }
 }

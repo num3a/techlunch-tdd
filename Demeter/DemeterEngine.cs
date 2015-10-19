@@ -12,7 +12,7 @@ namespace Demeter
         private readonly ILightSensor _lightSensor;
 
         public bool LightsOn { get; set; }
-        
+
         public DemeterEngine( IMoistureSensor moistureSensor, ILightSensor lightSensor)
         {
             _moistureSensor = moistureSensor;
@@ -51,9 +51,9 @@ namespace Demeter
             Middle
         }
 
-        public void TurnOnTheLights()
+        public void ToogleTheLights()
         {
-            LightsOn = true;
+            LightsOn = _lightSensor.AmbiantLuminosityIsDark();
         }
     }
 }
