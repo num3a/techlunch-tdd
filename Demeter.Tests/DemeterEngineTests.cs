@@ -42,8 +42,10 @@ namespace Demeter.Tests
             var moistureSensor = Substitute.For<IMoistureSensor>();
             var lightSensor = Substitute.For<ILightSensor>();
 
-            var engine = new DemeterEngine(moistureSensor, lightSensor);
+            lightSensor.AmbiantLuminosityIsDark().Returns(true);
 
+            var engine = new DemeterEngine(moistureSensor, lightSensor);
+            Assert.IsTrue(engine.LightsOn);
         }
 
 
