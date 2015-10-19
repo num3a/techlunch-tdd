@@ -45,6 +45,7 @@ namespace Demeter.Tests
             lightSensor.AmbiantLuminosityIsDark().Returns(true);
 
             var engine = new DemeterEngine(moistureSensor, lightSensor);
+            engine.TurnOnTheLights();
             Assert.IsTrue(engine.LightsOn);
         }
 

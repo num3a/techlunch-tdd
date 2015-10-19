@@ -50,5 +50,10 @@ namespace Demeter
             VeryHigh,
             Middle
         }
+
+        public void TurnOnTheLights()
+        {
+            LightsOn = true;
+        }
     }
 }
