@@ -10,10 +10,14 @@ namespace Demeter.Tests
 {
     public class DemeterEngineTests
     {
+        private IMoistureSensor _moistureSensor;
+        private ILightSensor _lightSensor;
+        private DemeterEngine _engine;
+
         [SetUp]
         public void Setup()
         {
-            
+            InitializeEngine();
         }
 
         [TestCase(5, DemeterEngine.MoistureLevel.VeryLow)]
@@ -27,28 +31,38 @@ namespace Demeter.Tests
         [TestCase(100, DemeterEngine.MoistureLevel.VeryHigh)]
         public void Engine_Should_ReturnMoistureLevel(int actualMoistureInPercentage, DemeterEngine.MoistureLevel level)
         {
-            var moistureSensor = Substitute.For<IMoistureSensor>();
-            moistureSensor.GetLevelInPourcentage().Returns(actualMoistureInPercentage);
-            var engine = new DemeterEngine(moistureSensor, null);
+            StubGetLevelInPourcentage(actualMoistureInPercentage);
 
-            var moistureLevel = engine.GetMoistureLevel();
-            moistureSensor.Received().GetLevelInPourcentage();
+            var moistureLevel = _engine.GetMoistureLevel();
+            _moistureSensor.Received().GetLevelInPourcentage();
+
             Assert.AreEqual(moistureLevel, level);
         }
-
+        
         [Test]
         public void Engine_Should_TurnUpTheLight_When_TheNightCameOut()
         {
-            var moistureSensor = Substitute.For<IMoistureSensor>();
-            var lightSensor = Substitute.For<ILightSensor>();
+            StubAmbiantLuminosity();
+            _engine.TurnOnTheLights();
 
-            lightSensor.AmbiantLuminosityIsDark().Returns(true);
-
-            var engine = new DemeterEngine(moistureSensor, lightSensor);
-            engine.TurnOnTheLights();
-            Assert.IsTrue(engine.LightsOn);
+            Assert.IsTrue(_engine.LightsOn);
+        }
+        
+        private void InitializeEngine()
+        {
+            _moistureSensor = Substitute.For<IMoistureSensor>();
+            _lightSensor = Substitute.For<ILightSensor>();
+            _engine = new DemeterEngine(_moistureSensor, _lightSensor);
         }
 
+        private void StubAmbiantLuminosity()
+        {
+            _lightSensor.AmbiantLuminosityIsDark().Returns(true);
+        }
 
+        private void StubGetLevelInPourcentage(int actualMoistureInPercentage)
+        {
+            _moistureSensor.GetLevelInPourcentage().Returns(actualMoistureInPercentage);
+        }
     }
 }
